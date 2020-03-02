@@ -1,0 +1,15 @@
+language: python
+python:
+  - 3.5
+  - 3.6
+  - 3.7
+
+install:
+  - |
+    pip install -U -e .[test]
+script:
+  - |
+    pytest -v --cov ridge --cov-config `pwd`/.coveragerc --cov-report xml:`pwd`/cov.xml --doctest-modules ridge
+after_success:
+  - |
+    codecov --file `pwd`/cov.xml --flags unittests -e TRAVIS_JOB_NUMBER

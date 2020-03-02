@@ -1,3 +1,4 @@
+import pytest
 import numpy as np
 import logging
 from ridge import ridge, ridge_corr, bootstrap_ridge

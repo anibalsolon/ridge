@@ -4,7 +4,6 @@
 import numpy as np
 import ctypes
 from ctypes import CDLL, POINTER, c_int, byref, c_char, c_double
-from scipy.io import loadmat
 
 from numpy.core import array, asarray, zeros, empty, transpose, \
         intc, single, double, csingle, cdouble, inexact, complexfloating, \
@@ -206,18 +205,3 @@ def svd_dgesvd(a, full_matrices=1, compute_uv=1):
         return wrap(u), s, wrap(vt)
     else:
         return s
-
-if __name__ == '__main__':
-    a = loadmat('svd_error.mat')['svd_error'].newbyteorder('=')
-    u, s, vt = svd_dgesvd(a) 
-    print s
-    #print u
-    #print vt
-    if True:
-        u2, s2, vt2 = np.linalg.svd(a) 
-        print s2
-        print u2
-        print vt2
-        print s2-s
-        print u2-u
-        print vt2-vt
