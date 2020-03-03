@@ -1,9 +1,11 @@
-#import scipy
-import numpy as np
-import logging
-from .utils import mult_diag, counter
-import random
+import scipy
 import itertools as itools
+import logging
+import random
+
+import numpy as np
+
+from .utils import counter, mult_diag, svd
 
 zs = lambda v: (v-v.mean(0))/v.std(0) ## z-score function
 
@@ -31,13 +33,7 @@ def ridge(stim, resp, alpha, singcutoff=1e-10, normalpha=False, logger=ridge_log
     wt : array_like, shape (N, M)
         Linear regression weights.
     """
-    try:
-        U,S,Vh = np.linalg.svd(stim, full_matrices=False)
-    except np.linalg.LinAlgError:
-        logger.info("NORMAL SVD FAILED, trying more robust dgesvd..")
-        from text.regression.svd_dgesvd import svd_dgesvd
-        U,S,Vh = svd_dgesvd(stim, full_matrices=False)
-
+    U, S, Vh = svd(stim, full_matrices=False)
     UR = np.dot(U.T, np.nan_to_num(resp))
     
     # Expand alpha to a collection if it's just a single value
@@ -112,12 +108,7 @@ def ridge_corr_pred(Rstim, Pstim, Rresp, Presp, valphas, normalpha=False,
     """
     ## Calculate SVD of stimulus matrix
     logger.info("Doing SVD...")
-    try:
-        U,S,Vh = np.linalg.svd(Rstim, full_matrices=False)
-    except np.linalg.LinAlgError:
-        logger.info("NORMAL SVD FAILED, trying more robust dgesvd..")
-        from text.regression.svd_dgesvd import svd_dgesvd
-        U,S,Vh = svd_dgesvd(Rstim, full_matrices=False)
+    U, S, Vh = svd(Rstim, full_matrices=False)
 
     ## Truncate tiny singular values for speed
     origsize = S.shape[0]
@@ -213,12 +204,7 @@ def ridge_corr(Rstim, Pstim, Rresp, Presp, alphas, normalpha=False, corrmin=0.2,
     """
     ## Calculate SVD of stimulus matrix
     logger.info("Doing SVD...")
-    try:
-        U,S,Vh = np.linalg.svd(Rstim, full_matrices=False)
-    except np.linalg.LinAlgError:
-        logger.info("NORMAL SVD FAILED, trying more robust dgesvd..")
-        from text.regression.svd_dgesvd import svd_dgesvd
-        U,S,Vh = svd_dgesvd(Rstim, full_matrices=False)
+    U, S, Vh = svd(Rstim, full_matrices=False)
 
     ## Truncate tiny singular values for speed
     origsize = S.shape[0]

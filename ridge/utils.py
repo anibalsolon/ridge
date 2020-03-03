@@ -4,6 +4,16 @@ import numpy as np
 import random
 import sys
 
+
+def svd(a, full_matrices=True, compute_uv=True):
+    try:
+        U, S, Vh = np.linalg.svd(a, full_matrices=full_matrices, compute_uv=compute_uv)
+    except np.linalg.LinAlgError:
+        from scipy.linalg import svd
+        U, S, Vh = svd(a, full_matrices=full_matrices, compute_uv=compute_uv, lapack_driver='gesvd')
+    return U, S, Vh
+
+
 def zscore(mat, return_unzvals=False):
     """Z-scores the rows of [mat] by subtracting off the mean and dividing
     by the standard deviation.
