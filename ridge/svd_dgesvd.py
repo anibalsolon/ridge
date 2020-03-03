@@ -88,18 +88,18 @@ def _fastCopyAndTranspose(type, *arrays):
 def _assertRank2(*arrays):
     for a in arrays:
         if len(a.shape) != 2:
-            raise LinAlgError, '%d-dimensional array given. Array must be \
-            two-dimensional' % len(a.shape)
+            raise LinAlgError(f'{len(a.shape)}-dimensional array given. '
+                              f'Array must be two-dimensional')
 
 def _assertSquareness(*arrays):
     for a in arrays:
         if max(a.shape) != min(a.shape):
-            raise LinAlgError, 'Array must be square'
+            raise LinAlgError('Array must be square')
 
 def _assertFinite(*arrays):
     for a in arrays:
         if not (isfinite(a).all()):
-            raise LinAlgError, "Array must not contain infs or NaNs"
+            raise LinAlgError("Array must not contain infs or NaNs")
 def _assertNonEmpty(*arrays):
     for a in arrays:
         if size(a) == 0:
