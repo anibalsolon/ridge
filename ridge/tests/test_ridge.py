@@ -33,7 +33,6 @@ def test_ridge_case():
         chunklen=10, nchunks=15, return_wt=False
     )
 
-    assert corr[-1] > 0.9
-
     # Corr should increase quickly across "voxels". Last corr should be large (>0.9-ish).
     # wt should be very similar to realwt for last few voxels.
+    assert corr[-1] > 0.9
